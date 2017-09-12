@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+   width="200px" height="200px" viewBox="0 0 200 200"
+   xml:space="preserve">
+<g transform="translate(-255 -140)">
+	<polygon fill="#404d37" fill-opacity="0.6" stroke-opacity="0.6" stroke="#000000" stroke-width="1"
+		points="306.1485,316.9564 347.2734,242.8401 315.0608,159.9304 269.9919,233.1983"/>
+	<polygon fill="#404d37" fill-opacity="0.6" stroke-opacity="0.6" stroke="#000000" stroke-width="1"
+		points="406.9098,323.5806 444.2373,246.3656 347.2734,242.8401 306.1485,316.9564"/>
+	<polygon fill="#404d37" fill-opacity="0.6" stroke-opacity="0.6" stroke="#000000" stroke-width="1"
+		points="415.6987,160.4039 315.0608,159.9304 347.2734,242.8401 444.2373,246.3656"/>
+</g>
+
+<g transform="translate(-255 -140)">
+	<polygon fill="#262e21" fill-opacity="0.75" stroke="#000000" stroke-width="1"
+		points="406.9098,323.5806 306.1485,316.9564 269.9919,233.1983 374.6847,236.7229"/>
+	<polygon fill="#6c815d" fill-opacity="0.75" stroke="#000000" stroke-width="1"
+		points="374.6847,236.7229 415.6987,160.4039 444.2373,246.3656 406.9098,323.5806"/>
+	<polygon fill="#5f7152" fill-opacity="0.75" stroke="#000000" stroke-width="1"
+		points="269.9919,233.1983 315.0608,159.9304 415.6987,160.4039 374.6847,236.7229"/>
+</g>
+
+
+</svg>
