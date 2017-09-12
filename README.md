@@ -6,13 +6,13 @@ In this project, you will implement a simple software rasterizer that draws poin
 
 ## Getting started
 
-We will be distributing assignments with git. You can find the repository for this assignment at TODO_URL_HERE. If you are unfamiliar with git, here is what you need to do to get the starter code:
+We will be distributing assignments with git. You can find the repository for this assignment at https://github.com/cmu462/DrawSVG. If you are unfamiliar with git, here is what you need to do to get the starter code:
 
 ```
-$ git clone TODO_URL_HERE.git
+$ git clone https://github.com/cmu462/DrawSVG.git
 ```
 
-This will create a asst1_drawsvg folder with all the source files.
+This will create a  folder with all the source files.
 
 ### Build Instructions
 
