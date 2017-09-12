@@ -35,7 +35,7 @@ To build your code for this assignment:
 - Create a directory to build your code:
 
 ```
-$ cd asst1_drawsvg && mkdir build && cd build
+$ cd DrawSVG && mkdir build && cd build
 ```
 
 - Run CMake to generate makefile:
