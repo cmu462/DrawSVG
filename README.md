@@ -20,7 +20,9 @@ In order to ease the process of running on different platforms, we will be using
 
 #### OS X/Linux Build Instructions
 
-If you are working on OS X and do not have CMake installed, we recommend installing it through [Homebrew](http://brew.sh/): `$ brew install cmake`. If you are working on Linux, you should be able to install dependencies with your system's package manager as needed.
+If you are working on OS X and do not have CMake installed, we recommend installing it through [Homebrew](http://brew.sh/): `$ brew install cmake`.  You may also need the freetype package `$ brew install freetype`.
+
+If you are working on Linux, you should be able to install dependencies with your system's package manager as needed (you may need cmake and freetype, and possibly others).
 
 To build your code for this assignment:
 

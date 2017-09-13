@@ -161,8 +161,7 @@ endif(WIN32)
 # Required packages
 find_package(OpenGL REQUIRED)
 if(NOT WIN32)
-  #find_package(Freetype REQUIRED)
-  add_subdirectory("${CMU462_SOURCE_DIR}/deps/freetype")
+  find_package(Freetype REQUIRED)
 endif()
 
 # Use pkg-config for GLEW & GLFW if available
