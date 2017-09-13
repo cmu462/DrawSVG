@@ -18,43 +18,19 @@ This will create a  folder with all the source files.
 
 In order to ease the process of running on different platforms, we will be using [CMake](http://www.cmake.org/) for our assignments. You will need a CMake installation of version 2.8+ to build the code for this assignment. It should also be relatively easy to build the assignment and work locally on your OSX or 64-bit version of Linux. Building on Windows is in beta support, and the project can be run by SSH'ing through Andrew Linux using MobaXterm.
 
-If you are working on OS X and do not have CMake installed, we recommend installing it through [Macports](https://www.macports.org/):
+#### OS X/Linux Build Instructions
 
-```
-$ sudo port install cmake
-```
-
-Or [Homebrew](http://brew.sh/):
-
-```
-$ brew install cmake
-```
+If you are working on OS X and do not have CMake installed, we recommend installing it through [Homebrew](http://brew.sh/): `$ brew install cmake`. If you are working on Linux, you should be able to install dependencies with your system's package manager as needed.
 
 To build your code for this assignment:
 
-- Create a directory to build your code:
-
 ```
 $ cd DrawSVG && mkdir build && cd build
-```
-
-- Run CMake to generate makefile:
-
-```
 $ cmake ..
-```
-
-- Build your code:
-
-```
 $ make
 ```
 
-- Install the executable to your project root directory:
-
-```
-$ make install
-```
+These steps (1) create an out-of-source build directory, (2) configure the project using CMake, and (3) compile the project. If all goes well, you should see an executable `drawsvg` in the build directory. As you work, simply typing `make` in the build directory will recompile the project.
 
 #### Windows Build Instructions
 
