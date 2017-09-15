@@ -25,10 +25,10 @@ void SoftwareRendererImp::draw_svg( SVG& svg ) {
   }
 
   // draw canvas outline
-  Vector2D a = transform(Vector2D(    0    ,     0    )); a.x--; a.y++;
-  Vector2D b = transform(Vector2D(svg.width,     0    )); b.x++; b.y++;
-  Vector2D c = transform(Vector2D(    0    ,svg.height)); c.x--; c.y--;
-  Vector2D d = transform(Vector2D(svg.width,svg.height)); d.x++; d.y--;
+  Vector2D a = transform(Vector2D(    0    ,     0    )); a.x--; a.y--;
+  Vector2D b = transform(Vector2D(svg.width,     0    )); b.x++; b.y--;
+  Vector2D c = transform(Vector2D(    0    ,svg.height)); c.x--; c.y++;
+  Vector2D d = transform(Vector2D(svg.width,svg.height)); d.x++; d.y++;
 
   rasterize_line(a.x, a.y, b.x, b.y, Color::Black);
   rasterize_line(a.x, a.y, c.x, c.y, Color::Black);
