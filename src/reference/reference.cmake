@@ -32,8 +32,13 @@ else(DRAWSVG_BUILD_REFERENCE)
 
   # Import reference
   if (UNIX)
-    set_property(TARGET drawsvg_ref PROPERTY IMPORTED_LOCATION
-                 ${CMAKE_CURRENT_SOURCE_DIR}/reference/libdrawsvgref.a)
+	if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 5.2)
+      set_property(TARGET drawsvg_ref PROPERTY IMPORTED_LOCATION
+                   ${CMAKE_CURRENT_SOURCE_DIR}/reference/libdrawsvgref.a)
+    else()
+      set_property(TARGET drawsvg_ref PROPERTY IMPORTED_LOCATION
+                   ${CMAKE_CURRENT_SOURCE_DIR}/reference/libdrawsvgref_old.a)
+    endif()
   endif(UNIX)
 
   if(APPLE)
