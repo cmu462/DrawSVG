@@ -92,6 +92,15 @@ class DrawSVG : public Renderer {
     redraw();
   }
 
+  /**
+   * Get the current render method.
+   */
+  inline RenderMethod getRenderMethod() const {
+
+    return this->method;
+
+  }
+
   /** 
    * Draw a SVG illustration.
    */

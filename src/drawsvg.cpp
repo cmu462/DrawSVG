@@ -146,7 +146,7 @@ void DrawSVG::char_event( unsigned int key ) {
 
     // switch between iml and ref renderer
     case 'r': case 'R':
-      if (software_renderer == software_renderer_imp) {
+      if (getRenderMethod() == RenderMethod::Hardware || software_renderer == software_renderer_imp) {
         software_renderer = software_renderer_ref;
       } else {software_renderer = software_renderer_imp; }
       setRenderMethod( Software );
