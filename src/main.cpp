@@ -70,7 +70,7 @@ int loadPath( DrawSVG* drawsvg, const char* path) {
 
   // file exist?
   if(stat(path, &st) < 0 ) {
-    msg("File does not exit: " << path);
+    msg("File does not exist: " << path);
     return -1;
   }
 
