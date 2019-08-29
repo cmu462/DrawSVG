@@ -142,7 +142,7 @@ At this time the starter code does not correctly handle transparent points. We'l
 
 #### Task 1: Hardware Renderer
 
-In this task, you will finish implementing parts of the hardware renderer by using the knowledge from the OpenGL tutorial session. In particular, you will be responsible for implementing `rasterize_point()`, `rasterize_line()`, and `rasterize_triangle()` in `hardware_renderer.cpp`. All other OpenGL context has been set up for you outside of these methods, so you only need to use `glBegin()`, `glEnd()`, and appropriate function calls in between those two functions.
+In this task, you will finish implementing parts of the hardware renderer by using the knowledge from the OpenGL tutorial session. In particular, you will be responsible for implementing `rasterize_point()`, `rasterize_line()`, and `rasterize_triangle()` in `hardware/hardware_renderer.cpp`. All other OpenGL context has been set up for you outside of these methods, so you only need to use `glBegin()`, `glEnd()`, and appropriate function calls in between those two functions.
 
 #### Task 2 : Warm Up: Drawing Lines
 
@@ -169,7 +169,7 @@ In this task, you will implement `rasterize_triangle()` in `software_renderer.cp
 
 Your implementation should:
 
-- Sample triangle coverage using the methods discussed in Lecture 4. While in Task 2 you were given choice in how you defined the outputs of line drawing, there is an exact solution to the problem of sampling triangle coverage. The position of screen sample points--at half-integer coordinates in screen space--was described above.
+- Sample triangle coverage using the methods discussed in Lecture _Drawing a Triangle_. While in Task 2 you were given choice in how you defined the outputs of line drawing, there is an exact solution to the problem of sampling triangle coverage. The position of screen sample points--at half-integer coordinates in screen space--was described above.
 - To receive full credit in Task 3 your implementation should assume that a sample point on a triangle edge is covered by the triangle. Your implementation **DOES NOT** need to respect the triangle "edge rules" to avoid "double counting" as discussed in class. (but we encourage you to try!)
 - Your implementation should use an algorithm that is more work efficient than simply testing all samples on screen. To receive full credit it should at least constrain coverage tests to samples that lie within a screen-space bounding box of the triangle. However, we encourage exploration of even more efficient implementations, such as ones that employ "early out" optimizations discussed in lecture.
 - When a triangle covers a sample, you should write the triangle's color to the location corresponding to this sample in `render_target`.
@@ -180,7 +180,7 @@ When you are done, you should be able to draw `basic/test3.svg`, `basic/test4.sv
 
 #### Task 4: Anti-Aliasing Using Supersampling
 
-**This part of the assignment requires only knowledge of concepts from Lectures 1, 4, and 5.**
+**This part of the assignment requires only knowledge of concepts from Lectures _Course Introduction_ and _Drawing a Triangle_.**
 
 In this task, you will extend your rasterizer to anti-alias triangle edges via supersampling. In response to the user changing the screen sampling rate (the = and - keys), the application will call `set_sample_rate()` . The parameter `sample_rate` defines the sampling rate in each dimension, so a value of 2 would correspond to a sample density of 4 samples per pixel. In this case, the samples lying within the top-left pixel of the screen would be located at locations (0.25, 0.25), (0.75, 0.25), (0.25, 0.75), and (0.75, 0.75).
 
@@ -206,9 +206,9 @@ Also observe that after enabling supersampled rendering, something might have go
 
 ##### Part 1: Modeling Transforms
 
-**This part of the assignment assumes knowledge of concepts in Lecture 5.**
+**This part of the assignment assumes knowledge of concepts in Lecture _Transformations_.**
 
-In Lecture 3 and Lecture 4 we discussed how it is common (and often very useful) to describe objects and shapes in their own local coordinate spaces and then build up more complicated objects by positioning many individual components in a single coordinate space. In this task you will extend the renderer to properly interpret the hierarchy of modeling transforms expressed in SVG files.
+In previous lectures we discussed how it is common (and often very useful) to describe objects and shapes in their own local coordinate spaces and then build up more complicated objects by positioning many individual components in a single coordinate space. In this task you will extend the renderer to properly interpret the hierarchy of modeling transforms expressed in SVG files.
 
 Recall that an SVG object consists of a hierarchy of shape elements. Each element in an SVG is associated with a modeling transform (see `SVGElement.transform` in `svg.h`) that defines the relationship between the object's local coordinate space and the parent element's coordinate space. At present, the implementation of `draw_element()`ignores these modeling transforms, so the only SVG objects your renderer has been able to correctly draw were objects that contained only identity modeling transforms.
 
@@ -222,15 +222,15 @@ When you are done, you should be able to draw `basic/test6.svg`.
 
 Notice the staff reference solution supports image pan and zoom behavior (drag the mouse to pan, use the scroll wheel to zoom). To implement this functionality in your solution, you will need to implement `ViewportImp::set_viewbox()` in `viewport.cpp`.
 
-A viewport defines a region of the SVG canvas that is visible in the app. When the application initially launches, the entire canvas is in view. For example, if the SVG canvas is of size 400x300, then the viewport will initially be centered on the center of the canvas, and have a vertical field of view that spans the entire canvas. Specifically, the member values of the `Viewport` class will be: `x=200, y=150, span=150`.
+A viewport defines a region of the SVG canvas that is visible in the app. When the application initially launches, the entire canvas is in view. For example, if the SVG canvas is of size 400x300, then the viewport will initially be centered on the center of the canvas, and have a vertical field of view that spans the entire canvas. Specifically, the member values of the `Viewport` class will be: `centerX=200, centerY=150, span=150`.
 
-When user actions require the viewport be changed, the application will call `update_viewbox()` with the appropriate parameters. Given this change in view parameters, you should implement `set_viewbox()` to compute a transform `canvas_to_norm` based on the new view parameters. This transform should map the SVG canvas coordinate space to a normalized space where the top left of the viewport region maps to (0,0) and the bottom right maps to (1, 1). For example, for the values `x=200,y=150, span=10`, then SVG canvas coordinate (190, 140) transforms to normalized coordinate (0, 0) and canvas coordinate (210, 160) transforms to (1, 1).
+When user actions require the viewport be changed, the application will call `update_viewbox()` with the appropriate parameters. Given this change in view parameters, you should implement `set_viewbox()` to compute and set transform `svg_2_norm` (by calling `set_svg_2_norm`) based on the new view parameters. This transform should map the SVG canvas coordinate space to a normalized space where the top left of the viewport region maps to (0,0) and the bottom right maps to (1, 1). For example, for the values `centerX=200, centerY=150, span=10`, then SVG canvas coordinate (190, 140) transforms to normalized coordinate (0, 0) and svg canvas coordinate (210, 160) transforms to (1, 1).
 
-Once you have correctly implemented `set_viewbox()`, your solution will respond to mouse controls in the same way as the reference implementation.
+Once you have correctly implemented `set_viewbox()`, your solution will respond to mouse pan and zoom in the same way as the reference implementation.
 
 #### Task 6: Drawing Scaled Images
 
-**This part of the assignment requires knowledge of concepts in Lecture 6.**
+**This part of the assignment requires knowledge of concepts in Lecture _Perspective Projection and Texture Mapping_.**
 
 In this task, you will implement `rasterize_image()` in `software_renderer.cpp`.
 
@@ -246,7 +246,7 @@ When you are done, you should be able to draw `basic/test7.svg`.
 
 #### Task 7: Anti-Aliasing Image Elements Using Trilinear Filtering
 
-**This part of the assignment requires knowledge of concepts in Lecture 6.**
+**This part of the assignment requires knowledge of concepts in Lecture _Perspective Projection and Texture Mapping_.**
 
 In this task you will improve your anti-aliasing of image elements by adding trilinear filtering. This will involve generating mipmaps for image elements at SVG load time and then modifying your sampling code from Task 6 to implement trilinear filtering using the mipmap. Your implementation is only required to work for images that have power-of-two dimensions in each direction.
 
@@ -260,6 +260,8 @@ At this point, zooming in and out of your image should produce nicely filtered r
 #### Task 8: Alpha Compositing
 
 Up until this point your renderer was not able to properly draw semi-transparent elements. Therefore, your last programming task in this assignment is to modify your code to implement [Simple Alpha Blending](http://www.w3.org/TR/SVGTiny12/painting.html#CompositingSimpleAlpha) in the SVG specification.
+
+Note that in the above link, all the element and canvas color values assume **premultiplied alpha**. Refer to [lecture slides](http://15462.courses.cs.cmu.edu/fall2018/lecture/depthtransparency/slide_031) and [this blog post](https://developer.nvidia.com/content/alpha-blending-pre-or-not-pre) for the differences between premultiplied alpha and non-premultiplied alpha.
 
 While the application will always clear the render target buffer to the canvas color at the beginning of a frame to opaque white ((255,255,255,255) in RGBA) before drawing any SVG element, your transparency implementation should make no assumptions about the state of the target at the beginning of a frame.
 
@@ -275,7 +277,7 @@ Now that you have implemented a few basic features of the SVG format, it is time
 
 We have provided you with a couple of examples of subdividing complex, smooth complex shapes into much simpler triangles in `/subdiv`. Subdivision is something you will dig into in great detail in the next assignment. You can see subdivision in action as you step though the test files we provided.
 
-In addition to what you have implemented already, the [SVG Basic Shapes](http://www.w3.org/TR/SVG/shapes.html) also include circles and ellipses. We may support these features by converting them to triangulated polygons. But if we zoom in on the edges, there will be a point at which the approximation breaks down and the image no longer will look like a smooth curve. Triangulating more finely can be costly as a large number of triangles may be necessary to get a good approximation. Is there a better way to sample these shapes? For example, implement `drawEllipse` in `drawsvg.cpp` (2 pts).
+In addition to what you have implemented already, the [SVG Basic Shapes](http://www.w3.org/TR/SVG/shapes.html) also include circles and ellipses. We may support these features by converting them to triangulated polygons. But if we zoom in on the edges, there will be a point at which the approximation breaks down and the image no longer will look like a smooth curve. Triangulating more finely can be costly as a large number of triangles may be necessary to get a good approximation. Is there a better way to sample these shapes? For example, implement `draw_ellipse` in `software_renderer.cpp` and `hardware/hardware_renderer.cpp` (2 pts).
 
 
 ### Friendly Advice from your TAs

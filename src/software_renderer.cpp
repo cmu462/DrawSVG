@@ -17,7 +17,7 @@ namespace CMU462 {
 void SoftwareRendererImp::draw_svg( SVG& svg ) {
 
   // set top level transformation
-  transformation = canvas_to_screen;
+  transformation = svg_2_screen;
 
   // draw all elements
   for ( size_t i = 0; i < svg.elements.size(); ++i ) {

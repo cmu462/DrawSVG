@@ -11,18 +11,18 @@ class Viewport {
 
   Viewport( ) : svg_2_norm( Matrix3x3::identity() ) { }
  
-  inline Matrix3x3 get_canvas_to_norm() {
+  inline Matrix3x3 get_svg_2_norm() {
     return svg_2_norm;
   }
 
-  inline void set_canvas_to_norm( Matrix3x3 m ) {
+  inline void set_svg_2_norm( Matrix3x3 m ) {
     svg_2_norm = m;
   }
 
-  // set viewbox to look at (x,y) in svg coordinate space. Span defineds 
+  // set viewbox to look at (centerX, centerY) in svg coordinate space. Span defineds 
   // the view radius of the viewbox in number of pixels (the amout of pixels
   // included in the viewbox in both x and y direction).
-  virtual void set_viewbox( float x, float y, float span ) = 0;
+  virtual void set_viewbox( float centerX, float centerY, float span ) = 0;
 
   // Move the viewbox by (dx,dy) in svg coordinate space. Scale the the view 
   // range by scale.
@@ -31,7 +31,7 @@ class Viewport {
  protected:
 
   // current viewbox properties
-  float x, y, span;
+  float centerX, centerY, span;
 
   // SVG coordinate to normalized display coordinates
   Matrix3x3 svg_2_norm;
@@ -42,7 +42,7 @@ class Viewport {
 class ViewportImp : public Viewport {
  public:
   
-  virtual void set_viewbox( float x, float y, float size );
+  virtual void set_viewbox( float centerX, float centerY, float size );
   virtual void update_viewbox( float dx, float dy, float scale );
 
 }; // class ViewportImp
@@ -51,7 +51,7 @@ class ViewportImp : public Viewport {
 class ViewportRef : public Viewport {
  public:
   
-  virtual void set_viewbox( float x, float y, float size );
+  virtual void set_viewbox( float centerX, float centerY, float size );
   virtual void update_viewbox( float dx, float dy, float scale );
 
 }; // class ViewportRef

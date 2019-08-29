@@ -73,8 +73,8 @@ void DrawSVG::init() {
     // auto adjust
     auto_adjust(i);
 
-    // set initial canvas_to_norm for imp using ref
-    viewport_imp[i]->set_canvas_to_norm(viewport_ref[i]->get_canvas_to_norm());
+    // set initial svg_2_norm for imp using ref
+    viewport_imp[i]->set_svg_2_norm(viewport_ref[i]->get_svg_2_norm());
 
     // generate mipmaps
     regenerate_mipmap(i);
@@ -436,12 +436,12 @@ void DrawSVG::redraw() {
 
   clear();
 
-  // set canvas_to_screen transformation
-  Matrix3x3 m_imp = norm_to_screen * viewport_imp[current_tab]->get_canvas_to_norm();
-  Matrix3x3 m_ref = norm_to_screen * viewport_ref[current_tab]->get_canvas_to_norm();
-  software_renderer_imp->set_canvas_to_screen( m_imp ); 
-  software_renderer_ref->set_canvas_to_screen( m_ref ); 
-  hardware_renderer->set_canvas_to_screen( m_ref );
+  // set svg_2_screen transformation
+  Matrix3x3 m_imp = norm_to_screen * viewport_imp[current_tab]->get_svg_2_norm();
+  Matrix3x3 m_ref = norm_to_screen * viewport_ref[current_tab]->get_svg_2_norm();
+  software_renderer_imp->set_svg_2_screen( m_imp ); 
+  software_renderer_ref->set_svg_2_screen( m_ref ); 
+  hardware_renderer->set_svg_2_screen( m_ref );
 
   switch (method) {
 
