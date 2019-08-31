@@ -42,6 +42,19 @@ If you plan on using Visual Studio to debug your program, you can change `drawsv
 
 If you feel that your program is running slowly, you can also change the build mode to `Release` from `Debug` by clicking the Solution Configurations drop down menu on the top menu bar. Note that you will have to set `Command Arguments` again if you change the build mode.
 
+#### Windows build instructions using CLion 
+
+(tested on CLion 2018.3)
+
+Open CLion, then do `File -> Import Project..`
+
+In the popped out window, find and select the project folder `...\DrawSVG`, click OK, click Open Existing Project, then select New Window
+
+Make sure the drop down menu on top right has drawsvg selected (it should say `drawsvg | Debug`). Then open the drop down menu again and go to Edit Configurations..
+
+Fill in Program arguments, say, `./svg/basic`, then click Apply and close the popup
+
+Now you should be able to click on the green run button on top right to run the project.
 
 
 ### Using the Mini-SVG Viewer App
