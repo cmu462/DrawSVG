@@ -104,6 +104,13 @@ The assignment is divided into nine major tasks, which are described below in th
 
 Before you start, here are some basic information on the structure of the starter code.
 
+All the source code files are contained in `src` directory. You're welcome to browse through and/or edit any file, but the following ones and their headers are probably the most relevant:
+
+- `hardware/hardware_renderer` (task 1)
+- `software_renderer` (most tasks)
+- `viewport` (task 5)
+- `texture` (tasks 6, 7)
+
 Most of your work will be constrained to implementing part of the class `SoftwareRendererImp` in `software_renderer.cpp`. The most important method is `draw_svg` which (not surprisingly) accepts an SVG object to draw. An SVG file defines its canvas (which defines a 2D coordinate space), and specifies a list of shape elements (such as points, lines, triangles, and images) that should be drawn on that canvas. Each shape element has a number of style parameters (e.g., color) as well as a modeling transform used to determine the element's position on the canvas. You can find the definition of the SVG class (and all the associated `SVGElements`) in `svg.h`. Notice that one type of `SVGElement` is a group that itself contains child elements. Therefore, you should think of an SVG file as defining a tree of shape elements. (Interior nodes of the tree are groups, and leaves are shapes.)
 
 Another important method on the `SoftwareRendererImp` class is `set_render_target()`, which provides your code a buffer corresponding to the output image (it also provides width and height of the buffer in pixels, which are stored locally as `target_w` and `target_h`). This buffer is often called the "render target" in many applications, since it is the "target" of rendering commands. **We use the term pixel here on purpose because the values in this buffer are the values that will be displayed on screen.** Pixel values are stored in row-major format, and each pixel is an 8-bit RGBA value (32 bits in total). Your implementation needs to fill in the contents of this buffer when it is asked to draw an SVG file.
@@ -300,9 +307,13 @@ In addition to what you have implemented already, the [SVG Basic Shapes](http://
 ### Friendly Advice from your TAs
 
 - As always, start early. There is a lot to implement in this assignment, and no official checkpoint, so don't fall behind!
+- Open `.../DrawSVG/CMU462/docs/html/index.html` with a browser to see documentation of many utility classes, especially the ones related to vectors and matrices.
 - Be careful with memory allocation, as too many or too frequent heap allocations will severely degrade performance.
-- Make sure you have a submission directory that you can write to as soon as possible. Notify course staff if this is not the case.
 - While C has many pitfalls, C++ introduces even more wonderful ways to shoot yourself in the foot. It is generally wise to stay away from as many features as possible, and make sure you fully understand the features you do use.
+- The reference solution is **for reference only**, and we compare your result to reference solution only qualitatively. It contains bugs, too, for example sometimes lines are not drawn when its endpoints are offscreen, and lines get thinner when supersampling. So don't panic if number of pixels different from reference seems large. Still, looking at that diff image could be a good sanity check.
+- We also mostly run your code with svg files in the `basic` folder, so don't worry too much about the hardcore ones.
+- Currently, DrawSVG does not support rendering `<circle>` svg elements (which is different from `<ellipse>`).
+
 
 ### Resources and Notes
 
