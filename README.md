@@ -186,9 +186,11 @@ In this task, you will extend your rasterizer to anti-alias triangle edges via s
 
 ![Sample locations](misc/coord_4spp.png?raw=true)
 
-It's reasonable to think of supersampled rendering as rendering an image that is `sample_rate` times larger than the actual output image in each dimension, then resampling the larger rendered output down to the screen sampling rate after rendering is complete. To help you out, here is a sketch of an implementation. **Note: If you implemented your triangle rasterizer in terms of sampling coverage in screen-space coordinates (and not in terms of pixels), then the code changes to support supersampling should be fairly simple for triangles:**
+It's reasonable to think of supersampled rendering as rendering an image that is `sample_rate` times larger than the actual output image in each dimension, then resampling the larger rendered output down to the screen sampling rate after rendering is complete. **Note: If you implemented your triangle rasterizer in terms of sampling coverage in screen-space coordinates (and not in terms of pixels), then the code changes to support supersampling should be fairly simple for triangles.**
 
-- When rasterizing primitives such as triangles, rather than directly updating `render_target`, your rasterization should update the contents of a larger buffer (perhaps call it `supersample_target`) that holds the per-super-sample results. Yes, you will have to allocate/free this buffer yourself. Question: when is the right time to perform this allocation in the code?
+To help you out, here is a sketch of an implementation:
+
+- The image being rendered is stored in `render_target`, an array that stores each pixel's color components as an `uint8_t` in rgbargba.. order. Refer to `rasterize_point` to see how it can be modified. When rasterizing primitives such as triangles, rather than directly updating `render_target`, your rasterization should update the contents of a larger buffer (perhaps call it `supersample_target`) that holds the per-super-sample results. Yes, you will have to allocate/free this buffer yourself. Question: when is the right time to perform this allocation in the code?
 - After rendering is complete, your implementation must resample the supersampled results buffer to obtain sample values for the render target. This is often called "resolving" the supersample buffer into the render target. Please implement resampling using a simple unit-area box filter.
   Note that the function `SoftwareRendererImp::resolve()` is called by `draw_svg()` after the SVG file has been drawn. Thus it's a very convenient place to perform resampling.
 
@@ -222,9 +224,11 @@ When you are done, you should be able to draw `basic/test6.svg`.
 
 Notice the staff reference solution supports image pan and zoom behavior (drag the mouse to pan, use the scroll wheel to zoom). To implement this functionality in your solution, you will need to implement `ViewportImp::set_viewbox()` in `viewport.cpp`.
 
-A viewport defines a region of the SVG canvas that is visible in the app. When the application initially launches, the entire canvas is in view. For example, if the SVG canvas is of size 400x300, then the viewport will initially be centered on the center of the canvas, and have a vertical field of view that spans the entire canvas. Specifically, the member values of the `Viewport` class will be: `centerX=200, centerY=150, span=150`.
+A viewport defines a region of the SVG canvas that is visible in the app. The 3 properties we care about here are `centerX`, `centerY` and `vspan` (vertical span). They are all defined in normalized svg coordinate space.
 
-When user actions require the viewport be changed, the application will call `update_viewbox()` with the appropriate parameters. Given this change in view parameters, you should implement `set_viewbox()` to compute and set transform `svg_2_norm` (by calling `set_svg_2_norm`) based on the new view parameters. This transform should map the SVG canvas coordinate space to a normalized space where the top left of the viewport region maps to (0,0) and the bottom right maps to (1, 1). For example, for the values `centerX=200, centerY=150, span=10`, then SVG canvas coordinate (190, 140) transforms to normalized coordinate (0, 0) and svg canvas coordinate (210, 160) transforms to (1, 1).
+When the application initially launches, the entire canvas is in view. For example, when it loads an SVG canvas, the viewport is initially centered on the canvas, and have a vertical field of view that spans the entire canvas. Specifically, the member values of the `Viewport` class will be: `centerX=0.5, centerY=0.5`, and `vspan` will be some value >= 0.5.
+
+When user actions require the viewport be changed, the application will call `update_viewbox()` with the appropriate parameters. Given this change in view parameters, you should implement `set_viewbox()` to compute and set transform `svg_2_norm` (by calling `set_svg_2_norm`) based on the new view parameters. This transform should map the normalized SVG canvas coordinate space to a normalized device coordinate space, where the top left of the viewport region maps to (0,0) and the bottom right maps to (1, 1). For example, for the values `centerX=0, centerY=0, vspan=1`, then normalized SVG canvas coordinate `(0, 0)` (bottom left corner) transforms to normalized coordinate `(0.5, 0.5)` (center of screen) and normalized SVG canvas coordinate `(0, 1)` (bottom right corner) transforms to `(0.5, 1)` (bottom center).
 
 Once you have correctly implemented `set_viewbox()`, your solution will respond to mouse pan and zoom in the same way as the reference implementation.
 
@@ -238,9 +242,9 @@ To keep things very simple, we are going to constrain this problem to rasterizin
 
 - The image element should cover all screen samples inside the specified rectangle.
 - For each image, texture space spans a [0-1]^2 domain as described in class. That is, given the example above, the mapping from screen-space to texture-space is as follows: `(x0, y0)` in screen space maps to image texture coordinate `(0, 0)` and `(x1, y1)` maps to `(1, 1)`.
-- You may wish to look at the implementation of input texture images in `texture.h/.cpp`. The class `Sampler2D` provides skeleton of methods for nearest-neighbor (`sampler_nearest()`), bilinear (`sampler_bilinear()`), and trilinear filtering (`sample_trilinear()`). In this task, for each covered sample, the color of the image at the specified sample location should be computed using **bilinear filtering** of the input texture. Therefore you should implement `Sampler2D::sampler_bilinear()` in `texture.cpp` and call it from `rasterize_image()`. (However, we recommend first implementing `Sampler2D::sampler_nearest()` -- as nearest neighbor filtering is simpler and will be given partial credit.)
+- You may wish to look at the implementation of input texture images in `texture.h/.cpp`. The class `Sampler2D` provides skeleton of methods for nearest-neighbor (`sample_nearest()`), bilinear (`sample_bilinear()`), and trilinear filtering (`sample_trilinear()`). In this task, for each covered sample, the color of the image at the specified sample location should be computed using **bilinear filtering** of the input texture. Therefore you should implement `Sampler2D::sample_bilinear()` in `texture.cpp` and call it from `rasterize_image()`. (However, we recommend first implementing `Sampler2D::sample_nearest()` -- as nearest neighbor filtering is simpler and will be given partial credit.)
 - As discussed in class, please assume that image pixels correspond to samples at half-integer coordinates in texture space.
-- The `Texture` struct stored in the `Sampler2D` class maintains multiple image buffers corresponding to a mipmap hierarchy. In this task, you will sample from level 0 of the hierarchy: `Texture::mipmap[0]`.
+- The `Texture` struct stored in the `Sampler2D` class maintains multiple image buffers corresponding to a mipmap hierarchy. In this task, you will sample from level 0 of the hierarchy: `Texture::mipmap[0]`. In other words, if you call one of the samplers above, you should pass in `0` for the level parameter.
 
 When you are done, you should be able to draw `basic/test7.svg`.
 
@@ -261,7 +265,7 @@ At this point, zooming in and out of your image should produce nicely filtered r
 
 Up until this point your renderer was not able to properly draw semi-transparent elements. Therefore, your last programming task in this assignment is to modify your code to implement [Simple Alpha Blending](http://www.w3.org/TR/SVGTiny12/painting.html#CompositingSimpleAlpha) in the SVG specification.
 
-Note that in the above link, all the element and canvas color values assume **premultiplied alpha**. Refer to [lecture slides](http://15462.courses.cs.cmu.edu/fall2018/lecture/depthtransparency/slide_031) and [this blog post](https://developer.nvidia.com/content/alpha-blending-pre-or-not-pre) for the differences between premultiplied alpha and non-premultiplied alpha.
+Note that in the above link, all the element and canvas color values assume **premultiplied alpha**. Refer to lecture _Depth and Transparency_ and [this blog post](https://developer.nvidia.com/content/alpha-blending-pre-or-not-pre) for the differences between premultiplied alpha and non-premultiplied alpha.
 
 While the application will always clear the render target buffer to the canvas color at the beginning of a frame to opaque white ((255,255,255,255) in RGBA) before drawing any SVG element, your transparency implementation should make no assumptions about the state of the target at the beginning of a frame.
 

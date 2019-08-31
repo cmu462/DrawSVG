@@ -19,19 +19,18 @@ class Viewport {
     svg_2_norm = m;
   }
 
-  // set viewbox to look at (centerX, centerY) in svg coordinate space. Span defineds 
-  // the view radius of the viewbox in number of pixels (the amout of pixels
-  // included in the viewbox in both x and y direction).
-  virtual void set_viewbox( float centerX, float centerY, float span ) = 0;
+  // set viewbox to look at (centerX, centerY) in normalized svg coordinate space. vspan defines 
+  // the vertical view radius of the viewbox (ie. vspan>=0.5 means the entire svg canvas is in view)
+  virtual void set_viewbox( float centerX, float centerY, float vspan ) = 0;
 
-  // Move the viewbox by (dx,dy) in svg coordinate space. Scale the the view 
+  // Move the viewbox by (dx,dy) in normalized svg coordinate space. Scale the the view 
   // range by scale.
   virtual void update_viewbox( float dx, float dy, float scale ) = 0;
 
  protected:
 
   // current viewbox properties
-  float centerX, centerY, span;
+  float centerX, centerY, vspan;
 
   // SVG coordinate to normalized display coordinates
   Matrix3x3 svg_2_norm;
