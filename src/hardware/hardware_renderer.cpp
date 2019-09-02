@@ -50,7 +50,7 @@ void HardwareRenderer::draw_svg( SVG& svg ) {
   begin2DDrawing();
 
   // set top level transformation
-  transformation = canvas_to_screen;
+  transformation = svg_2_screen;
 
   // draw all elements
   for ( size_t i = 0; i < svg.elements.size(); ++i ) {

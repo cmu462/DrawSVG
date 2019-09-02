@@ -33,8 +33,8 @@ class HardwareRenderer : public SVGRenderer {
   }
 
   // Set svg to screen transformation
-  inline void set_canvas_to_screen( Matrix3x3 canvas_to_screen ) {
-    this->canvas_to_screen = canvas_to_screen;
+  inline void set_svg_2_screen( Matrix3x3 svg_2_screen ) {
+    this->svg_2_screen = svg_2_screen;
   }
 
  private:
@@ -96,7 +96,7 @@ class HardwareRenderer : public SVGRenderer {
   size_t context_w; size_t context_h;
 
   // SVG coordinates to screen space coordinates
-  Matrix3x3 canvas_to_screen;
+  Matrix3x3 svg_2_screen;
     
 }; // class HardwareRenderer
 

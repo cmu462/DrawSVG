@@ -4,23 +4,23 @@
 
 namespace CMU462 {
 
-void ViewportImp::set_viewbox( float x, float y, float span ) {
+void ViewportImp::set_viewbox( float centerX, float centerY, float vspan ) {
 
   // Task 5 (part 2): 
-  // Set svg to normalized device coordinate transformation. Your input
-  // arguments are defined as SVG canvans coordinates.
-  this->x = x;
-  this->y = y;
-  this->span = span; 
+  // Set normalized svg to normalized device coordinate transformation. Your input
+  // arguments are defined as normalized SVG canvas coordinates.
+  this->centerX = centerX;
+  this->centerY = centerY;
+  this->vspan = vspan; 
 
 }
 
 void ViewportImp::update_viewbox( float dx, float dy, float scale ) { 
   
-  this->x -= dx;
-  this->y -= dy;
-  this->span *= scale;
-  set_viewbox( x, y, span );
+  this->centerX -= dx;
+  this->centerY -= dy;
+  this->vspan *= scale;
+  set_viewbox( centerX, centerY, vspan );
 }
 
 } // namespace CMU462
