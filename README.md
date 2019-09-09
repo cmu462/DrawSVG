@@ -16,7 +16,7 @@ This will create a  folder with all the source files.
 
 ### Build Instructions
 
-In order to ease the process of running on different platforms, we will be using [CMake](http://www.cmake.org/) for our assignments. You will need a CMake installation of version 2.8+ to build the code for this assignment. It should also be relatively easy to build the assignment and work locally on your OSX or 64-bit version of Linux. Building on Windows is in beta support, and the project can be run by SSH'ing through Andrew Linux using MobaXterm.
+In order to ease the process of running on different platforms, we will be using [CMake](http://www.cmake.org/) for our assignments. You will need a CMake installation of version 2.8+ to build the code for this assignment. It should also be relatively easy to build the assignment and work locally on your OSX or 64-bit version of Linux. Building on Windows is in beta support, and the project can be run by SSH'ing through Andrew Linux using MobaXterm or by using Windows Subsystem for Linux and VcXsrv Windows X Server.
 
 #### OS X/Linux Build Instructions
 
@@ -95,6 +95,11 @@ A table of all the keyboard controls in the **draw** application is provided bel
 | Toggle pixel inspector view              |   Z   |
 | Toggle image diff view                   |   D   |
 | Reset viewport to default position       | SPACE |
+
+Other controls:
+
+- Panning the view: click and drag the cursor
+- Zooming in and out: scroll wheel (typically a two-finger drag on a trackpad)
 
 ### What You Need to Do
 
