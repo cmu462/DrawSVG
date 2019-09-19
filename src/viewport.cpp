@@ -7,7 +7,7 @@ namespace CMU462 {
 void ViewportImp::set_viewbox( float centerX, float centerY, float vspan ) {
 
   // Task 5 (part 2): 
-  // Set normalized svg to normalized device coordinate transformation. Your input
+  // Set svg coordinate to normalized device coordinate transformation. Your input
   // arguments are defined as normalized SVG canvas coordinates.
   this->centerX = centerX;
   this->centerY = centerY;

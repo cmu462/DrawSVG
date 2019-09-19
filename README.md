@@ -103,7 +103,7 @@ Other controls:
 
 ### What You Need to Do
 
-The assignment is divided into nine major tasks, which are described below in the order the course staff suggests you attempt them. You are of course allowed to do the assignment in any order you choose. Although you have 2 weeks to complete this assignment, the assignment **involves significant implementation effort. Also, be advised that meeting the requirements of later tasks may involve restructuring code that you implemented in earlier ones.** In short: you are highly advised to aim to compete the first three tasks in the first week of the assignment.
+The assignment is divided into nine major tasks, which are described below in the order the course staff suggests you attempt them. You are of course allowed to do the assignment in any order you choose. Although you have 2 weeks to complete this assignment, the assignment **involves significant implementation effort. Also, be advised that meeting the requirements of later tasks may involve restructuring code that you implemented in earlier ones.** In short: you are highly advised to aim to complete the first three tasks in the first week of the assignment.
 
 #### Getting Acquainted with the Starter Code
 
@@ -169,6 +169,8 @@ At this time the starter code does not correctly handle transparent points. We'l
 
 In this task, you will finish implementing parts of the hardware renderer by using the knowledge from the OpenGL tutorial session. In particular, you will be responsible for implementing `rasterize_point()`, `rasterize_line()`, and `rasterize_triangle()` in `hardware/hardware_renderer.cpp`. All other OpenGL context has been set up for you outside of these methods, so you only need to use `glBegin()`, `glEnd()`, and appropriate function calls in between those two functions.
 
+Once you're done, you can test your solution by pressing `h`.
+
 #### Task 2 : Warm Up: Drawing Lines
 
 In this task you will add line drawing functionality by implementing the function `rasterize_line()` in `software_renderer.cpp`.
@@ -183,7 +185,7 @@ We encourage you to start with an implementation of [Bresenham's algorithm](http
 
 When you are done, your solution should be able to correctly render `basic/test2.svg`.
 
-#####Possible Extra Credit Extensions:
+##### Possible Extra Credit Extensions:
 
 - (2 pts) If you compare your initial Bresenham results with the reference implementation, you will notice that the reference solution generates smooth lines. For example, you could modify your Bresenham implementation to perform [Xiaolin Wu's line algorithm](https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm).
 - (2 pts) Add support for specifying a line width.
@@ -251,9 +253,9 @@ Notice the staff reference solution supports image pan and zoom behavior (drag t
 
 A viewport defines a region of the SVG canvas that is visible in the app. The 3 properties we care about here are `centerX`, `centerY` and `vspan` (vertical span). They are all defined in normalized svg coordinate space.
 
-When the application initially launches, the entire canvas is in view. For example, when it loads an SVG canvas, the viewport is initially centered on the canvas, and have a vertical field of view that spans the entire canvas. Specifically, the member values of the `Viewport` class will be: `centerX=0.5, centerY=0.5`, and `vspan` will be some value >= 0.5.
+When the application initially launches, the entire canvas is in view. When the application initially launches, the entire canvas is in view. For example, if the SVG canvas is of size 400x300, then the viewport will initially be centered on the canvas, and have a vertical field of view that spans the entire canvas. Specifically, the member values of the `Viewport` class will look like: `centerX=200, centerY=150`, and `vspan` is some number`>=150`.
 
-When user actions require the viewport be changed, the application will call `update_viewbox()` with the appropriate parameters. Given this change in view parameters, you should implement `set_viewbox()` to compute and set transform `svg_2_norm` (by calling `set_svg_2_norm`) based on the new view parameters. This transform should map the normalized SVG canvas coordinate space to a normalized device coordinate space, where the top left of the viewport region maps to (0,0) and the bottom right maps to (1, 1). For example, for the values `centerX=0, centerY=0, vspan=1`, then normalized SVG canvas coordinate `(0, 0)` (bottom left corner) transforms to normalized coordinate `(0.5, 0.5)` (center of screen) and normalized SVG canvas coordinate `(0, 1)` (bottom right corner) transforms to `(0.5, 1)` (bottom center).
+When user actions require the viewport be changed, the application will call `update_viewbox()` with the appropriate parameters. Given this change in view parameters, you should implement `set_viewbox()` to compute and set transform `svg_2_norm` (by calling `set_svg_2_norm`) based on the new view parameters. This transform should map the SVG canvas coordinate space to a normalized device coordinate space where the top left of the visible SVG coordinate maps to `(0, 0)` and the bottom right maps to `(1, 1)`. For example, for the values `centerX=200, centerY=150, vspan=10`, then SVG canvas coordinate `(200, 150)` transforms to normalized coordinate `(0.5, 0.5)` (center of screen) and canvas coordinate `(200, 160)` transforms to `(0.5, 1)` (bottom center).
 
 Once you have correctly implemented `set_viewbox()`, your solution will respond to mouse pan and zoom in the same way as the reference implementation.
 
