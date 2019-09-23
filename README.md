@@ -251,7 +251,7 @@ When you are done, you should be able to draw `basic/test6.svg`.
 
 Notice the staff reference solution supports image pan and zoom behavior (drag the mouse to pan, use the scroll wheel to zoom). To implement this functionality in your solution, you will need to implement `ViewportImp::set_viewbox()` in `viewport.cpp`.
 
-A viewport defines a region of the SVG canvas that is visible in the app. The 3 properties we care about here are `centerX`, `centerY` and `vspan` (vertical span). They are all defined in normalized svg coordinate space.
+A viewport defines a region of the SVG canvas that is visible in the app. The 3 properties we care about here are `centerX`, `centerY` and `vspan` (vertical span). They are all defined in svg coordinate space.
 
 When the application initially launches, the entire canvas is in view. For example, if the SVG canvas is of size 400x300, then the viewport will initially be centered on the canvas, and have a vertical field of view that spans the entire canvas. Specifically, the member values of the `Viewport` class will look like: `centerX=200, centerY=150`, and `vspan` is some number`>=150`.
 
