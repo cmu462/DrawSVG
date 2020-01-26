@@ -205,6 +205,8 @@ Once you have successfully implemented triangle drawing, you will able to draw a
 
 When you are done, you should be able to draw `basic/test3.svg`, `basic/test4.svg`, and `basic/test5.svg`.
 
+Note that the vertices may be in counter-clockwise or clockwise order when passed in. Using the cross-product to check orientation may be helpful.
+
 #### Task 4: Anti-Aliasing Using Supersampling
 
 **This part of the assignment requires only knowledge of concepts from Lectures _Course Introduction_ and _Drawing a Triangle_.**
@@ -217,13 +219,14 @@ It's reasonable to think of supersampled rendering as rendering an image that is
 
 To help you out, here is a sketch of an implementation:
 
-- The image being rendered is stored in `render_target`, an array that stores each pixel's color components as an `uint8_t` in rgbargba.. order. Refer to `rasterize_point` to see how it can be modified. When rasterizing primitives such as triangles, rather than directly updating `render_target`, your rasterization should update the contents of a larger buffer (perhaps call it `supersample_target`) that holds the per-super-sample results. Yes, you will have to allocate/free this buffer yourself. Question: when is the right time to perform this allocation in the code?
+- The image being rendered is stored in `render_target`, an array that stores each pixel's color components as an `uint8_t` in rgbargba... order. The width and height in pixels of the `render_target` are stored as `target_w` and `target_h` respectively. Refer to `rasterize_point` to see how it can be modified.
+- When rasterizing primitives such as triangles, rather than directly updating `render_target`, your rasterization should update the contents of a larger buffer (perhaps call it `sample_buffer` or `supersample_target`) that holds the per-super-sample results. It's up to you to manage this buffer yourself. (Hint: See `software_renderer.h` for a declarations of helpers used by the reference. The functions `vector::resize()` and `memset()` may be worth looking into.)
 - After rendering is complete, your implementation must resample the supersampled results buffer to obtain sample values for the render target. This is often called "resolving" the supersample buffer into the render target. Please implement resampling using a simple [unit-area box filter](https://en.wikipedia.org/wiki/Box_blur).
-  Note that the function `SoftwareRendererImp::resolve()` is called by `draw_svg()` after the SVG file has been drawn. Thus it's a very convenient place to perform resampling.
+- Note that the function `SoftwareRendererImp::resolve()` is called by `draw_svg()` after the SVG file has been drawn. Thus it's a very convenient place to perform resampling.
 
 When you are done, try increasing the supersampling rate in the viewer, and bask in the glory of having much smoother triangle edges.
 
-Also observe that after enabling supersampled rendering, something might have gone very wrong with the rasterization of points and lines. (Hint: they probably appear to get thinner!) **Please modify your implementation of rasterizing points and lines so that supersampled rendering of these primitives preserves their thickness across different supersampling rates.** (A solution that does not anti-alias points and lines is acceptable.)
+Also observe that after enabling supersampled rendering, something might have gone very wrong with the rasterization of points and lines. (Hint: they probably appear to get thinner!) **Please modify your implementation of rasterizing points and lines so that supersampled rendering of these primitives preserves their thickness across different supersampling rates.** Consider having separate functions for filling a "pixel" and filling a "sample." (A solution that does not anti-alias points and lines is acceptable.)
 
 **Possible Extra Credit Extensions:**
 
