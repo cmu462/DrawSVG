@@ -16,7 +16,7 @@ This will create a  folder with all the source files.
 
 ### Build Instructions
 
-In order to ease the process of running on different platforms, we will be using [CMake](http://www.cmake.org/) for our assignments. You will need a CMake installation of version 2.8+ to build the code for this assignment. It should also be relatively easy to build the assignment and work locally on your OSX or 64-bit version of Linux. Building on Windows is in beta support, and the project can be run by SSH'ing through Andrew Linux using MobaXterm or by using Windows Subsystem for Linux and VcXsrv Windows X Server.
+In order to ease the process of running on different platforms, we will be using [CMake](http://www.cmake.org/) for our assignments. You will need a CMake installation of version 2.8+ to build the code for this assignment. It should also be relatively easy to build the assignment and work locally on your OSX or 64-bit version of Linux. Building on Windows is in beta support, and the project can be run by SSH'ing through Andrew Linux using MobaXterm. Building on ARM (e.g. Raspberry Pi, some Chromebooks) is currently not supported.
 
 #### OS X/Linux Build Instructions
 
@@ -167,7 +167,7 @@ At this time the starter code does not correctly handle transparent points. We'l
 
 #### Task 1: Hardware Renderer
 
-In this task, you will finish implementing parts of the hardware renderer by using the knowledge from the OpenGL tutorial session. In particular, you will be responsible for implementing `rasterize_point()`, `rasterize_line()`, and `rasterize_triangle()` in `hardware/hardware_renderer.cpp`. All other OpenGL context has been set up for you outside of these methods, so you only need to use `glBegin()`, `glEnd()`, and appropriate function calls in between those two functions.
+In this task, you will finish implementing parts of the hardware renderer by using the knowledge from the OpenGL tutorial session. In particular, you will be responsible for implementing `rasterize_point()`, `rasterize_line()`, and `rasterize_triangle()` in `hardware/hardware_renderer.cpp`. All other OpenGL context has been set up for you outside of these methods, so you only need to use `glBegin()`, `glEnd()`, and appropriate function calls in between those two functions. (You may be interested in `glColor4f()` and `glVertex2f()`, along with `GL_POINTS`, `GL_LINES`, and `GL_TRIANGLES`.)
 
 Once you're done, you can test your solution by pressing `h`.
 
@@ -218,7 +218,7 @@ It's reasonable to think of supersampled rendering as rendering an image that is
 To help you out, here is a sketch of an implementation:
 
 - The image being rendered is stored in `render_target`, an array that stores each pixel's color components as an `uint8_t` in rgbargba.. order. Refer to `rasterize_point` to see how it can be modified. When rasterizing primitives such as triangles, rather than directly updating `render_target`, your rasterization should update the contents of a larger buffer (perhaps call it `supersample_target`) that holds the per-super-sample results. Yes, you will have to allocate/free this buffer yourself. Question: when is the right time to perform this allocation in the code?
-- After rendering is complete, your implementation must resample the supersampled results buffer to obtain sample values for the render target. This is often called "resolving" the supersample buffer into the render target. Please implement resampling using a simple unit-area box filter.
+- After rendering is complete, your implementation must resample the supersampled results buffer to obtain sample values for the render target. This is often called "resolving" the supersample buffer into the render target. Please implement resampling using a simple [unit-area box filter](https://en.wikipedia.org/wiki/Box_blur).
   Note that the function `SoftwareRendererImp::resolve()` is called by `draw_svg()` after the SVG file has been drawn. Thus it's a very convenient place to perform resampling.
 
 When you are done, try increasing the supersampling rate in the viewer, and bask in the glory of having much smoother triangle edges.
@@ -316,6 +316,7 @@ In addition to what you have implemented already, the [SVG Basic Shapes](http://
 - As always, start early. There is a lot to implement in this assignment, and no official checkpoint, so don't fall behind!
 - Open `.../DrawSVG/CMU462/docs/html/index.html` with a browser to see documentation of many utility classes, especially the ones related to vectors and matrices.
 - Be careful with memory allocation, as too many or too frequent heap allocations will severely degrade performance.
+- Be careful with types (e.g. float, double, int, uint8_t), casting, and using the right functions for each type.
 - While C has many pitfalls, C++ introduces even more wonderful ways to shoot yourself in the foot. It is generally wise to stay away from as many features as possible, and make sure you fully understand the features you do use.
 - The reference solution is **for reference only**, and we compare your result to reference solution only qualitatively. It contains bugs, too, for example sometimes lines are not drawn when its endpoints are offscreen, and lines get thinner when supersampling. So don't panic if number of pixels different from reference seems large. Still, looking at that diff image could be a good sanity check.
 - We also mostly run your code with svg files in the `basic` folder, so don't worry too much about the hardcore ones.
