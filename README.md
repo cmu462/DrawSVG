@@ -258,7 +258,7 @@ A viewport defines a region of the SVG canvas that is visible in the app. The 3 
 
 When the application initially launches, the entire canvas is in view. For example, if the SVG canvas is of size 400x300, then the viewport will initially be centered on the canvas, and have a vertical field of view that spans the entire canvas. Specifically, the member values of the `Viewport` class will look like: `centerX=200, centerY=150`, and `vspan` is some number`>=150`.
 
-When user actions require the viewport be changed, the application will call `update_viewbox()` with the appropriate parameters. Given this change in view parameters, you should implement `set_viewbox()` to compute and set transform `svg_2_norm` (by calling `set_svg_2_norm`) based on the new view parameters. This transform should map the SVG canvas coordinate space to a normalized device coordinate space where the top left of the visible SVG coordinate maps to `(0, 0)` and the bottom right maps to `(1, 1)`. For example, for the values `centerX=200, centerY=150, vspan=10`, then SVG canvas coordinate `(200, 150)` transforms to normalized coordinate `(0.5, 0.5)` (center of screen) and canvas coordinate `(200, 160)` transforms to `(0.5, 1)` (bottom center).
+When user actions require the viewport be changed, the application will call `update_viewbox()` with the appropriate parameters. Given this change in view parameters, you should implement `set_viewbox()` to compute and set transform `svg_2_norm` (by calling `set_svg_2_norm`) based on the new view parameters. This transform, which involves translation and scaling, should map the SVG canvas coordinate space to a normalized device coordinate space where the top left of the visible SVG coordinate maps to `(0, 0)` and the bottom right maps to `(1, 1)`. For example, for the values `centerX=200, centerY=150, vspan=10`, then SVG canvas coordinate `(200, 150)` transforms to normalized coordinate `(0.5, 0.5)` (center of screen) and canvas coordinate `(200, 160)` transforms to `(0.5, 1)` (bottom center).
 
 Once you have correctly implemented `set_viewbox()`, your solution will respond to mouse pan and zoom in the same way as the reference implementation.
 
@@ -272,7 +272,8 @@ To keep things very simple, we are going to constrain this problem to rasterizin
 
 - The image element should cover all screen samples inside the specified rectangle.
 - For each image, texture space spans a [0-1]^2 domain as described in class. That is, given the example above, the mapping from screen-space to texture-space is as follows: `(x0, y0)` in screen space maps to image texture coordinate `(0, 0)` and `(x1, y1)` maps to `(1, 1)`.
-- You may wish to look at the implementation of input texture images in `texture.h/.cpp`. The class `Sampler2D` provides skeleton of methods for nearest-neighbor (`sample_nearest()`), bilinear (`sample_bilinear()`), and trilinear filtering (`sample_trilinear()`). In this task, for each covered sample, the color of the image at the specified sample location should be computed using **bilinear filtering** of the input texture. Therefore you should implement `Sampler2D::sample_bilinear()` in `texture.cpp` and call it from `rasterize_image()`. (However, we recommend first implementing `Sampler2D::sample_nearest()` -- as nearest neighbor filtering is simpler and will be given partial credit.)
+- You may wish to look at the implementation of input texture images in `texture.h/.cpp`. The class `Sampler2D` provides skeleton of methods for nearest-neighbor (`sample_nearest()`), bilinear (`sample_bilinear()`), and trilinear filtering (`sample_trilinear()`). There is a pre-existing instance of Sampler2D, `sampler`, in `software_renderer.h`.
+- In this task, for each covered sample, the color of the image at the specified sample location should be computed using **bilinear filtering** of the input texture. Therefore you should implement `Sampler2D::sample_bilinear()` in `texture.cpp` and call it from `rasterize_image()`. (However, we recommend first implementing `Sampler2D::sample_nearest()` -- as nearest neighbor filtering is simpler and will be given partial credit.)
 - As discussed in class, please assume that image pixels correspond to samples at half-integer coordinates in texture space.
 - The `Texture` struct stored in the `Sampler2D` class maintains multiple image buffers corresponding to a mipmap hierarchy. In this task, you will sample from level 0 of the hierarchy: `Texture::mipmap[0]`. In other words, if you call one of the samplers above, you should pass in `0` for the level parameter.
 
@@ -286,6 +287,7 @@ In this task you will improve your anti-aliasing of image elements by adding tri
 
 - To generate mipmaps, you need to modify code in `Sampler2DImp::generate_mips()` in `texture.cpp`. Code for allocating all the appropriate buffers for each level of the mipmap hierarchy is given to you. However, you will need to populate the contents of these buffers from the original texture data in level 0. **Your implementation can assume that all input texture images have power of two dimensions. (But it should not assume inputs images are square.)**
 - Then modify your implementation of `rasterize_image()` from Task 6 to perform trilinear filtered sampling from the mipmap. Your implementation will first need to compute the appropriate level at which to sample from the mip-hierarchy. Recall from class that as image elements shrink on screen, to avoid aliasing the rasterizer should sample from increasingly high (increasing prefiltered) levels of the hierarchy.
+- The method `Sampler2D::sample_trilinear()` has two parameters, `u_scale` and `v_scale`, which depend on the sample rate and the size of the image. It is up to you how to use them.
 
 The program only stores a single set of mipmaps for each image, so the `rasterize_image()` routine (both your implementation and the reference solution) will use whichever mipmaps have been generated most recently using the `'` and `;` keys. Be sure you are testing with your own mipmaps and not the reference ones.
 
@@ -299,11 +301,19 @@ Note that in the above link, all the element and canvas color values assume **pr
 
 While the application will always clear the render target buffer to the canvas color at the beginning of a frame to opaque white ((255,255,255,255) in RGBA) before drawing any SVG element, your transparency implementation should make no assumptions about the state of the target at the beginning of a frame.
 
+You will need to modify the parts of the code which write to the supersample buffer.
+
 When you are done, you should be able to correctly draw the tests in `/alpha`.
 
 #### Task 9: Draw Something!!!
 
-Now that you have implemented a few basic features of the SVG format, it is time to get creative and draw something! You can create an SVG file in popular design tools like Adobe Illustrator or Inkscape and export SVG files, or use a variety of editors online. However, be aware that our starter code and your renderer implementation only support a subset of the features defined in the SVG specification, and these applications may not always encode shapes with the primitives we support. (You may need to convert complicated paths to the basic primitives in these tools.) Also, it is not very hard to write SVG files directly since they are just XML files. Please name this file `task9.svg`.
+Now that you have implemented a few basic features of the SVG format, it is time to get creative and draw something!
+
+You can create an SVG file in popular design tools like Adobe Illustrator or Inkscape and export SVG files, or use a variety of editors online. Since an SVG file is just an XML file, you could even use a text editor or write a script to generate the text!
+
+Be aware that our starter code and your renderer implementation only support a **subset** of the features defined in the SVG specification, and applications like Adobe Illustrator or Inkscape may not always encode shapes with the primitives we support. (You may need to convert complicated paths to the basic primitives in these tools.)
+
+Please name this file `task9.svg`.
 
 #### Going Further: Tasks that May Potentially Win You Extra Credit:
 

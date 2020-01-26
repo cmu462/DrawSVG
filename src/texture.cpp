@@ -64,7 +64,7 @@ void Sampler2DImp::generate_mips(Texture& tex, int startLevel) {
 
   }
 
-  // fill all 0 sub levels with interchanging colors
+  // fill all 0 sub levels with interchanging colors (JUST AS A PLACEHOLDER)
   Color colors[3] = { Color(1,0,0,1), Color(0,1,0,1), Color(0,0,1,1) };
   for(size_t i = 1; i < tex.mipmap.size(); ++i) {
 
